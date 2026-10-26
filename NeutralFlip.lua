@@ -350,7 +350,7 @@ local function setNumber(key, v, lo, hi, label)
 end
 
 local HELP = "/nflip (list flips) | scan | here neutral|faction|auto | status | cut faction|neutral 0.05"
-  .. " | age <hours> | margin 0.2 | tooltip | report | wipe"
+  .. " | age <hours> | margin 0.2 | tooltip | way [bootybay|gadgetzan|everlook] | report | wipe"
 
 SLASH_KENNYNEUTRALFLIP1 = "/nflip"
 SLASH_KENNYNEUTRALFLIP2 = "/neutralflip"
@@ -402,6 +402,8 @@ SlashCmdList.KENNYNEUTRALFLIP = function(msg)
       lines[#lines + 1] = key .. " items " .. n
     end
     Core.ShowReport(lines)
+  elseif cmd == "way" then
+    NF.Waypoint(rest)
   elseif cmd == "wipe" then
     db.houses = {}
     Core.Print("all recorded prices wiped.")

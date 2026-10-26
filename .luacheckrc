@@ -9,4 +9,4 @@ read_globals = { "C_Item", "C_AuctionHouse", "C_Timer", "C_Container", "C_AddOns
   "GetMoneyString", "GetMoney", "GetTime", "GetRealZoneText", "GetSubZoneText", "GetBuildInfo", "GetLocale",
   "GetRealmName", "UnitFactionGroup", "UnitAffectingCombat", "issecretvalue", "NUM_BAG_SLOTS",
   "NUM_TOTAL_EQUIPPED_BAG_SLOTS", "time", "date",
-  "KennyPriceLog", "KennyMatTooltip" }
+  "KennyPriceLog", "KennyMatTooltip", "LibStub", "TomTom" }

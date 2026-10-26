@@ -3,3 +3,4 @@
 dist/
 .lua/
 .luarocks/
+__pycache__/

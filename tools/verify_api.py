@@ -12,6 +12,16 @@ Exit code 1 if anything is missing.
 """
 import re, sys, subprocess, pathlib, shutil
 
+# Globals and methods that come from the host addons (DBM, BigWigs, Details, Questie, LibStub...) or from the
+# client but not from Blizzard's UI source. Each one was checked by hand in the host's own source; see host_api.py.
+import importlib.util as _ilu
+_spec = _ilu.spec_from_file_location("host_api", pathlib.Path(__file__).with_name("host_api.py"))
+_h = _ilu.module_from_spec(_spec); _spec.loader.exec_module(_h)
+HOST, HOST_METHODS = _h.HOST, _h.HOST_METHODS
+_rc = (pathlib.Path(__file__).parent.parent / ".luacheckrc").read_text()
+_m = re.search(r"^globals\s*=\s*\{(.*?)\}", _rc, re.S | re.M)
+OWN = set(re.findall(r'"(\w+)"', _m.group(1))) if _m else set()
+
 SRC = pathlib.Path(sys.argv[1]); files = [pathlib.Path(p) for p in sys.argv[2:]]
 UI = SRC / "Interface"; DOC = UI / "AddOns/Blizzard_APIDocumentationGenerated"
 docs = {p.name: p.read_text(errors="ignore") for p in DOC.glob("*.lua")}
@@ -61,9 +71,11 @@ for f in files:
     for g in sorted(read - own):
         if g in WOW_LUA_EXTRAS: report(g, rg(rf"\b{g}\("), WOW_LUA_EXTRAS[g] + "; used in UI source"); continue
         if g.startswith("C_") or g == "Enum": continue  # members checked below
-        if g.startswith("Kenny") or g == "MatTooltipDB": report(g, True, "our own optional addon global"); continue
-        ok = g in global_funcs or rg(rf"^\s*{g}\s*=|^function {g}\(|name=\"{g}\"")
-        report(g, ok, "global API doc" if g in global_funcs else "defined in UI source")
+        if g in OWN: report(g, True, "our own global (declared in .luacheckrc)"); continue
+        if g in HOST: report(g, True, HOST[g]); continue
+        if g in global_funcs: report(g, True, "global API doc"); continue
+        if rg(rf"^\s*{g}\s*=|^function {g}\(|name=\"{g}\""): report(g, True, "defined in UI source"); continue
+        report(g, rg(rf"(^|[^.:\w]){g}\("), "called by Blizzard UI code")
     for n in sorted(set(re.findall(r"\b(C_\w+\.\w+)\b", code_nc))):
         report(n, n in ns_funcs, "API documentation")
     for e, v in sorted(set(re.findall(r"\bEnum\.(\w+)\.(\w+)", code_nc))):
@@ -79,6 +91,7 @@ for f in files:
     for meth in sorted(set(re.findall(r":(\w+)\(", code_nc)) | set(re.findall(r"\b\w+\.(StartMoving|StopMovingOrSizing)\b", code_nc))):
         if meth in ("match", "gmatch", "gsub", "find", "format", "lower", "upper", "sub", "rep", "byte", "len"):
             continue  # Lua string methods
+        if meth in HOST_METHODS: report(":" + meth, True, HOST_METHODS[meth]); continue
         ok = meth in doc_funcs or rg(rf":{meth}\(")
         report(":" + meth, ok, "widget API doc" if meth in doc_funcs else "used by Blizzard UI code")
 

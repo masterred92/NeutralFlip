@@ -6,6 +6,7 @@ ignore:
   - tools
   - .luacheckrc
   - media/logo.png
+  - media/screenshots
 
 manual-changelog:
   filename: CHANGELOG.md

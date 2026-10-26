@@ -1,6 +1,8 @@
 <p align="center"><img src="media/logo.png" alt="NeutralFlip logo" width="200"></p>
 
-# NeutralFlip (WoW: Forever) v0.1.0
+# NeutralFlip (WoW: Forever) v0.2.0
+
+[![Tests](https://github.com/masterred92/NeutralFlip/actions/workflows/tests.yml/badge.svg)](https://github.com/masterred92/NeutralFlip/actions/workflows/tests.yml) [![WoW: Forever](https://img.shields.io/badge/WoW%3A%20Forever-Interface%2016001-c8a165)](https://github.com/masterred92/NeutralFlip/blob/main/NeutralFlip.toc) [![Release](https://img.shields.io/github/v/release/masterred92/NeutralFlip?label=release)](https://github.com/masterred92/NeutralFlip/releases) [![License: MIT](https://img.shields.io/github/license/masterred92/NeutralFlip)](https://github.com/masterred92/NeutralFlip/blob/main/LICENSE) [![CurseForge](https://img.shields.io/badge/CurseForge-NeutralFlip-f16436)](https://www.curseforge.com/wow/addons/neutralflip) [![Wago](https://img.shields.io/badge/Wago-NeutralFlip-c1272d)](https://addons.wago.io/addons/neutralflip)
 
 In WoW: Forever each faction has its own auction house. The goblin auctioneers in **Booty Bay, Gadgetzan and Everlook** run the only cross-faction market. Prices there often differ a lot from your faction's house (see [auctionhouse.fyi Horde vs Alliance](https://auctionhouse.fyi/horde-vs-alliance)).
 
@@ -21,6 +23,10 @@ NeutralFlip keeps **separate prices for your faction AH and the neutral AH**. It
 **It never buys, posts or clicks anything.** It only records prices the AH already shows you, from your own searches or a full scan you start yourself. It also picks up full scans started by PriceLog or MatTooltip. You make every purchase and post.
 
 **Good to know:** the 5% faction / 15% neutral cuts come from [AHledger](https://ahledger.com/wow-forever/auction-house), and you can change them with `/nflip cut`. If a spot is detected as the wrong auction house, `/nflip here neutral` or `/nflip here faction` fixes it for that spot.
+
+**New in 0.2.0**
+- **TomTom arrow:** `/nflip way` points a TomTom arrow at the nearest neutral AH (Gadgetzan on Kalimdor, Booty Bay in the Eastern Kingdoms), or `/nflip way everlook`. Only if TomTom is installed. It sets a waypoint; you do the walking.
+- **LDB display:** with Titan Panel, ChocolateBar, Bazooka or another LibDataBroker display, NeutralFlip shows the number of flips, the top five in its tooltip, opens the list on left-click and sets the TomTom arrow on right-click.
 
 ## Download
 - **CurseForge:** https://www.curseforge.com/wow/addons/neutralflip (first release coming at launch, Nov 4). Author: [MasterRed92](https://www.curseforge.com/members/masterred92/projects).
@@ -48,6 +54,8 @@ Put the `NeutralFlip` folder in `World of Warcraft\_forever_\Interface\AddOns\` 
 11. Hover items during combat: no errors, no "action blocked" messages.
 12. `/reload` keeps everything. `/nflip report` opens a copyable window.
 13. In the AddOns list (character select or Esc > AddOns), NeutralFlip shows its icon. If it shows a blank or green square, report it; the addon still works.
+14. With TomTom: `/nflip way` in Kalimdor sets an arrow to Gadgetzan, in the Eastern Kingdoms to Booty Bay. If the arrow points somewhere odd, the Forever map IDs differ (report `/nflip report`).
+15. With Titan Panel or ChocolateBar: the NeutralFlip display shows the flip count; hover and click work.
 
 ## Licence
 MIT. Written from scratch; no code copied from other addons.
