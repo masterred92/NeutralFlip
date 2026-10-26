@@ -1,8 +1,7 @@
-# Packages and publishes to CurseForge, Wago and GitHub Releases. Runs ONLY when a v* tag is pushed
-# (e.g. v0.1.0 or v0.1.0-beta1; use annotated tags). Before the first tag, Kenny must:
-#   - create the CurseForge and Wago projects and add their IDs to NeutralFlip.toc
-#     (## X-Curse-Project-ID: <id> and ## X-Wago-ID: <id>)
-#   - add repo secrets CF_API_TOKEN and WAGO_API_TOKEN (GITHUB_TOKEN is automatic)
+# Packages and publishes to CurseForge, Wago and GitHub Releases. Runs ONLY when a v* tag is pushed.
+# A plain tag (v0.1.0, v0.1.1) publishes as a full Release; a tag containing "beta" or "alpha" would publish as beta/alpha.
+# Use annotated tags. Project IDs are already in NeutralFlip.toc. Before the first tag, Kenny must add the repo secrets
+# CF_API_TOKEN and WAGO_API_TOKEN (GITHUB_TOKEN is automatic) and set workflow permissions to read/write.
 name: Package and release
 
 on:
