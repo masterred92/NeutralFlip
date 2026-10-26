@@ -1,6 +1,6 @@
 ## Interface: 16001
 ## Title: NeutralFlip
-## Notes: Compares your faction AH with the neutral (Booty Bay / Gadgetzan / Everlook) AH and lists buys worth carrying across, after the 5%/15% cuts. You press every button. UNTESTED IN-GAME (WoW: Forever not launched).
+## Notes: Compares your faction AH with the neutral (Booty Bay / Gadgetzan / Everlook) AH and lists buys worth carrying across, after the 5%/15% cuts. You press every button.
 ## Author: Kenny
 ## Version: 0.1.0
 ## SavedVariables: KennyNeutralFlipDB

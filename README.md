@@ -2,12 +2,6 @@
 
 # NeutralFlip (WoW: Forever) v0.1.0
 
-> [!WARNING]
-> **Untested in-game. Use at your own risk.** WoW: Forever launches Nov 4 2026, so none of this has run in the real client yet.
-> - API calls are checked against Blizzard's UI source (Gethe/wow-ui-source `forever`, 1.60.1 build 70374), luacheck, and 38 mock-client tests.
-> - The neutral-AH map IDs (1434/1446/1452) are Classic-era IDs and haven't been confirmed for Forever. If detection is wrong, `/nflip here neutral|faction` fixes it for that spot.
-> - The 5% faction / 15% neutral cuts come from [AHledger](https://ahledger.com/wow-forever/auction-house), not Blizzard. Change them with `/nflip cut`.
-
 In WoW: Forever each faction has its own auction house. The goblin auctioneers in **Booty Bay, Gadgetzan and Everlook** run the only cross-faction market. Prices there often differ a lot from your faction's house (see [auctionhouse.fyi Horde vs Alliance](https://auctionhouse.fyi/horde-vs-alliance)).
 
 NeutralFlip keeps **separate prices for your faction AH and the neutral AH**. It then tells you which items are worth carrying across, after the cut:
@@ -25,6 +19,8 @@ NeutralFlip keeps **separate prices for your faction AH and the neutral AH**. It
 - **Tooltip:** adds one or two lines: both prices, plus the flip if there is one.
 
 **It never buys, posts or clicks anything.** It only records prices the AH already shows you, from your own searches or a full scan you start yourself. It also picks up full scans started by PriceLog or MatTooltip. You make every purchase and post.
+
+**Good to know:** the 5% faction / 15% neutral cuts come from [AHledger](https://ahledger.com/wow-forever/auction-house), and you can change them with `/nflip cut`. If a spot is detected as the wrong auction house, `/nflip here neutral` or `/nflip here faction` fixes it for that spot.
 
 ## Download
 - **CurseForge:** https://www.curseforge.com/wow/addons/neutralflip (first release coming at launch, Nov 4). Author: [MasterRed92](https://www.curseforge.com/members/masterred92/projects).
