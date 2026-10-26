@@ -1,0 +1,24 @@
+# Runs the offline checks on every push and pull request. Never packages or uploads anything.
+name: Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: leafo/gh-actions-lua@v13.1.0
+        with:
+          luaVersion: "5.1.5"
+      - uses: leafo/gh-actions-luarocks@v6.1.1
+      - name: Install luacheck
+        run: luarocks install luacheck
+      - name: Syntax, lint, mock-client tests
+        run: sh tests/run.sh

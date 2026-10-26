@@ -1,0 +1,11 @@
+# BigWigsMods/packager config. Project IDs go in NeutralFlip.toc as ## X-Curse-Project-ID / ## X-Wago-ID once they exist.
+package-as: NeutralFlip
+
+ignore:
+  - tests
+  - tools
+  - .luacheckrc
+
+manual-changelog:
+  filename: CHANGELOG.md
+  markup-type: markdown
