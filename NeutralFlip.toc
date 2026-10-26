@@ -6,6 +6,9 @@
 ## SavedVariables: KennyNeutralFlipDB
 ## OptionalDeps: PriceLog, MatTooltip
 ## X-License: MIT
+## IconTexture: Interface\AddOns\NeutralFlip\media\icon
+## X-Curse-Project-ID: 1767887
+## X-Wago-ID: ANz7zg64
 ## X-Category: Auction & Economy
 
 Compat.lua

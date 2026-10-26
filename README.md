@@ -1,3 +1,5 @@
+<p align="center"><img src="media/logo.png" alt="NeutralFlip logo" width="200"></p>
+
 # NeutralFlip (WoW: Forever) v0.1.0
 
 > [!WARNING]
@@ -25,8 +27,8 @@ NeutralFlip keeps **separate prices for your faction AH and the neutral AH**. It
 **It never buys, posts or clicks anything.** It only records prices the AH already shows you, from your own searches or a full scan you start yourself. It also picks up full scans started by PriceLog or MatTooltip. You make every purchase and post.
 
 ## Download
-- **CurseForge:** coming soon (TODO: project not created yet). Meanwhile see [MasterRed92 on CurseForge](https://www.curseforge.com/members/masterred92/projects).
-- **Wago Addons:** coming soon (TODO: project not created yet).
+- **CurseForge:** https://www.curseforge.com/wow/addons/neutralflip (first release coming at launch, Nov 4). Author: [MasterRed92](https://www.curseforge.com/members/masterred92/projects).
+- **Wago Addons:** https://addons.wago.io/addons/neutralflip (first release coming at launch, Nov 4).
 - **GitHub:** [Releases](https://github.com/masterred92/NeutralFlip/releases) (coming with the first tagged release) · [Issues](https://github.com/masterred92/NeutralFlip/issues)
 - **Companion addons** (optional, they share AH scans): [PriceLog](https://github.com/masterred92/PriceLog) · [MatTooltip](https://github.com/masterred92/MatTooltip) · [GoldPerSpot](https://github.com/masterred92/GoldPerSpot)
 
@@ -49,6 +51,7 @@ Put the `NeutralFlip` folder in `World of Warcraft\_forever_\Interface\AddOns\` 
 10. Optional: `/nflip scan` at an AH reports "saved N prices" within about a minute, with no lag spike or Lua error. Run it again straight away and it should refuse with a cooldown message.
 11. Hover items during combat: no errors, no "action blocked" messages.
 12. `/reload` keeps everything. `/nflip report` opens a copyable window.
+13. In the AddOns list (character select or Esc > AddOns), NeutralFlip shows its icon. If it shows a blank or green square, report it; the addon still works.
 
 ## Licence
 MIT. Written from scratch; no code copied from other addons.
