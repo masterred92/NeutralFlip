@@ -10,7 +10,7 @@ C_AuctionHouse.CalculateCommodityDeposit = function(id, _, q)
 W.items[785] = { "Mageroyal", 7, 9, 5 }
 
 W.loadAddon(".", "NeutralFlip")
-W.fire("PLAYER_LOGIN")
+W.fire("PLAYER_LOGIN"); W.runTimers()
 local NF, db = KennyNeutralFlip, KennyNeutralFlipDB
 check(db.schema == 1 and db.houses and db.overrides and db.rates, "schema 1 tables")
 
@@ -116,6 +116,6 @@ for _, c in ipairs({ "", "status", "report", "tooltip", "age 12", "margin 0.3", 
 end
 -- Prune at login
 W.now = W.now + 20 * 86400
-W.fire("PLAYER_LOGIN")
+W.fire("PLAYER_LOGIN"); W.runTimers()
 check(next(db.houses) == nil, "old prices pruned")
 W.done("NeutralFlip")

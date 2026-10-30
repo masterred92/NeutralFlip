@@ -85,6 +85,7 @@ end
 function M.loadAddon(dir, name)
   local ns = {}
   for line in io.lines(dir .. "/" .. name .. ".toc") do
+    line = line:gsub("\\", "/")
     if line:match("%.lua$") then assert(loadfile(dir .. "/" .. line))(name, ns) end
   end
   M.fire("ADDON_LOADED", name)

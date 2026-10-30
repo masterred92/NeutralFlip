@@ -2,17 +2,20 @@
 ## Title: NeutralFlip
 ## Notes: Compares your faction AH with the neutral (Booty Bay / Gadgetzan / Everlook) AH and lists buys worth carrying across, after the 5%/15% cuts. You press every button.
 ## Author: Kenny
-## Version: 0.2.0
+## Version: 0.3.0
 ## SavedVariables: KennyNeutralFlipDB
 ## OptionalDeps: PriceLog, MatTooltip, LibDataBroker-1.1, TomTom
 ## X-License: MIT
+## X-Website: https://github.com/masterred92/NeutralFlip
 ## IconTexture: Interface\AddOns\NeutralFlip\media\icon
 ## X-Curse-Project-ID: 1767887
 ## X-Wago-ID: ANz7zg64
 ## X-Category: Auction & Economy
 
-Compat.lua
-Core.lua
+Libs\KennyShared\Compat.lua
+Libs\KennyShared\Core.lua
+Libs\KennyShared\Hub.lua
+Locales\enUS.lua
 NeutralFlip.lua
 Waypoint.lua
 Broker.lua

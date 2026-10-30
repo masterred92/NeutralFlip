@@ -3,6 +3,7 @@
 -- you which items are worth carrying from one house to the other after the auction house cut.
 local ADDON, ns = ...
 local C, Core = ns.Compat, ns.Core
+local L = Core.L
 
 local NF = {}
 KennyNeutralFlip = NF
@@ -192,7 +193,7 @@ local function route(itemID, buy, sell, cut, from, to, now, bags)
     qtyKnown = buy.q ~= nil, total = profit * qty, carried = bags[itemID] or 0,
     thin = sell.p > buy.p * settings.maxRatio,
     deposit = (rate and info and info.sellPrice) and math.floor(rate * info.sellPrice * qty) or nil,
-    age = math.max(now - buy.t, now - sell.t),
+    age = math.max(now - buy.t, now - sell.t), buyAge = now - buy.t, sellAge = now - sell.t,
   }
 end
 
@@ -234,7 +235,7 @@ function NF.FormatLine(i, o)
   local s = ("%d. %s: BUY at %s AH at %s or less (%s%d) -> LIST at %s AH at %s -> +%s each, about %s total"):format(
     i, o.name, NF.KindLabel(o.from), C.Money(o.buy), o.qtyKnown and "x" or "x?", o.qty,
     NF.KindLabel(o.to), C.Money(o.listAt), C.Money(o.profit), C.Money(o.total))
-  local notes = { "data " .. ago(o.age) .. " old" }
+  local notes = { ("%s %s %s, %s %s %s"):format(NF.KindLabel(o.from), L["price"], ago(o.buyAge), NF.KindLabel(o.to), L["price"], ago(o.sellAge)) .. " " .. L["old"] }
   if o.deposit then notes[#notes + 1] = "deposit at risk " .. C.Money(o.deposit) end
   if o.carried > 0 then notes[#notes + 1] = "you carry " .. o.carried end
   if o.thin then notes[#notes + 1] = "THIN MARKET: check by hand" end
@@ -248,8 +249,10 @@ function NF.ListText(now)
   lines[1] = ("%s: %s AH vs neutral AH. Cuts %d%% / %d%%. Prices older than %dh ignored.")
     :format(realmName(), fac, settings.cutFaction * 100, settings.cutNeutral * 100, settings.maxAgeHours)
   if #list == 0 then
-    lines[2] = "Nothing worth carrying yet. Search or /nflip scan at BOTH your faction AH and a neutral AH"
-      .. " (Booty Bay, Gadgetzan, Everlook) within " .. settings.maxAgeHours .. "h, then check again."
+    lines[2] = L["Nothing worth carrying yet. Search or /nflip scan at BOTH your faction AH and a neutral AH (Booty Bay, Gadgetzan, Everlook), then check again."]
+    local fresh1, fresh2 = houseData(fac).lastScan, houseData(NEUTRAL).lastScan
+    lines[3] = ("%s: %s %s, %s %s"):format(L["Last full scan"], fac, fresh1 > 0 and date("%d %b %H:%M", fresh1) or L["never"],
+      L["neutral"], fresh2 > 0 and date("%d %b %H:%M", fresh2) or L["never"])
   end
   for i = 1, math.min(#list, settings.listSize) do lines[#lines + 1] = NF.FormatLine(i, list[i]) end
   lines[#lines + 1] = ""
@@ -260,13 +263,13 @@ end
 -- Tooltip: at most two lines, only added, never replacing anything another addon shows.
 local function OnItemTooltip(tooltip, data)
   if not (settings and settings.tooltip) then return end
-  if tooltip ~= GameTooltip and tooltip ~= ItemRefTooltip then return end
   local itemID = data and C.SafeNumber(data.id)
   if not itemID then return end
   local now, fac = C.Now(), playerFaction()
   local a, b = houseData(fac).items[itemID], houseData(NEUTRAL).items[itemID]
   if not (fresh(a, now) or fresh(b, now)) then return end
   local function part(label, r) return label .. " " .. (fresh(r, now) and C.Money(r.p) or "-") end
+  if tooltip.Claim then tooltip.Claim("price.auction") end -- MatTooltip then skips its own AH price line
   tooltip:AddLine("|cff33ff99NeutralFlip|r " .. part(fac, a) .. " | " .. part("Neutral", b))
   for _, o in ipairs(NF.ItemRoutes(itemID, now, {})) do
     if not o.thin then
@@ -313,11 +316,8 @@ f:SetScript("OnEvent", function(_, event, arg1)
     db.houses, db.overrides, db.rates = db.houses or {}, db.overrides or {}, db.rates or {}
     KennyNeutralFlipDB = db
     settings = Core.Settings(db.settings, DEFAULTS)
-    if TooltipDataProcessor and Enum and Enum.TooltipDataType then
-      TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Item, function(tt, data)
-        Core.SafeCall("tooltip", OnItemTooltip, tt, data)
-      end)
-    end
+    -- Shared tooltip block with our other addons (prices first, then verdicts); works the same alone.
+    ns.Hub.AddTooltip(ADDON, 20, function(tt, _, data) Core.SafeCall("tooltip", OnItemTooltip, tt, data) end)
     return
   end
   if not db then return end
@@ -350,7 +350,36 @@ local function setNumber(key, v, lo, hi, label)
 end
 
 local HELP = "/nflip (list flips) | scan | here neutral|faction|auto | status | cut faction|neutral 0.05"
-  .. " | age <hours> | margin 0.2 | tooltip | way [bootybay|gadgetzan|everlook] | report | wipe"
+  .. " | age <hours> | margin 0.2 | tooltip | way [bootybay|gadgetzan|everlook] | debug | report | wipe"
+
+-- Startup self-check: one loud warning if Forever lacks an API we need; first-run guide; /nflip debug.
+NF.REQUIRED_APIS = { "C_AuctionHouse.ReplicateItems", "C_AuctionHouse.GetNumReplicateItems", "C_AuctionHouse.GetReplicateItemInfo",
+  "C_AuctionHouse.GetBrowseResults", "C_AuctionHouse.GetNumCommoditySearchResults", "C_AuctionHouse.GetCommoditySearchResultInfo",
+  "C_AuctionHouse.IsThrottledMessageSystemReady", "C_Container.GetContainerItemInfo", "TooltipDataProcessor.AddTooltipPostCall" }
+Core.Setup({ cmd = "/nflip", required = NF.REQUIRED_APIS, optional = { "C_Map.GetBestMapForUnit", "TomTom", "LibStub", "KennyPriceLog" },
+  db = function() return db end,
+  firstRun = { L["Welcome! NeutralFlip compares your faction AH with the neutral AH. Three steps:"],
+    L["1. At your faction AH: search your items, or /nflip scan (one full scan per 15 min)."],
+    L["2. At a neutral AH (Booty Bay, Gadgetzan, Everlook; /nflip way for a TomTom arrow): do the same."],
+    L["3. /nflip lists what to carry where. Prices older than 24h are ignored. /nflip debug checks your setup."] },
+  debugLines = function()
+    local out = { L["location"] .. ": " .. NF.LocationKey() .. " -> " .. NF.KindLabel((NF.DetectKind())) }
+    for key, h in pairs(db.houses) do
+      local n = 0
+      for _ in pairs(h.items) do n = n + 1 end
+      out[#out + 1] = ("%s: %d %s, %s %s"):format(key, n, L["prices"], L["last full scan"], h.lastScan > 0 and date("%d %b %H:%M", h.lastScan) or L["never"])
+    end
+    return out
+  end })
+
+-- Enrichment for our other addons (e.g. GoldPerSpot's per-item list): the best fresh flip for an item, or nil.
+ns.Hub.Provide("flip", ADDON, function(itemID)
+  if not db then return nil end
+  for _, o in ipairs(NF.ItemRoutes(itemID, C.Now(), {})) do
+    if not o.thin then return { profit = o.profit, from = NF.KindLabel(o.from), to = NF.KindLabel(o.to), buy = o.buy, listAt = o.listAt } end
+  end
+end)
+Core.RegisterTextPanel("Flips", function() return (NF.ListText()) end) -- a tab in DEB's window when DEB hosts panels
 
 SLASH_KENNYNEUTRALFLIP1 = "/nflip"
 SLASH_KENNYNEUTRALFLIP2 = "/neutralflip"
@@ -359,13 +388,15 @@ SlashCmdList.KENNYNEUTRALFLIP = function(msg)
   local cmd, rest = (msg or ""):match("^(%S*)%s*(.-)$")
   cmd = cmd:lower()
   if cmd == "" or cmd == "list" then
-    Core.ShowText("List", "NeutralFlip: what to carry where (Ctrl+C copies)", (NF.ListText()))
+    Core.OpenView(function() Core.ShowText("List", "NeutralFlip: what to carry where (Ctrl+C copies)", (NF.ListText())) end)
   elseif cmd == "scan" then
     if not ahOpen then Core.Print("open an auction house first.") return end
     if C.InCombat() then Core.Print("not in combat.") return end
     local wait = SCAN_COOLDOWN - (C.Now() - (house.lastScan or 0))
     if wait > 0 then Core.Print(("full scan available in %d min. Your searches are still recorded."):format(math.ceil(wait / 60))) return end
     if not C.AHReady() then Core.Print("AH busy, try again shortly.") return end
+    local mine, by, left = ns.Hub.ClaimScan(ADDON)
+    if not mine then Core.Print(("%s %s; %s %d min. %s"):format(L["a full scan was already started by"], by or "?", L["next one in"], math.ceil(left / 60), L["Its results are recorded here too."])) return end
     C.AHReplicate()
     Core.Print("full scan requested. Stay at the AH until it reports.")
   elseif cmd == "here" then
@@ -402,6 +433,7 @@ SlashCmdList.KENNYNEUTRALFLIP = function(msg)
       lines[#lines + 1] = key .. " items " .. n
     end
     Core.ShowReport(lines)
+  elseif cmd == "debug" then Core.PrintDebug()
   elseif cmd == "way" then
     NF.Waypoint(rest)
   elseif cmd == "wipe" then

@@ -1,6 +1,6 @@
 <p align="center"><img src="media/logo.png" alt="NeutralFlip logo" width="200"></p>
 
-# NeutralFlip (WoW: Forever) v0.2.0
+# NeutralFlip (WoW: Forever) v0.3.0
 
 [![Tests](https://github.com/masterred92/NeutralFlip/actions/workflows/tests.yml/badge.svg)](https://github.com/masterred92/NeutralFlip/actions/workflows/tests.yml) [![WoW: Forever](https://img.shields.io/badge/WoW%3A%20Forever-Interface%2016001-c8a165)](https://github.com/masterred92/NeutralFlip/blob/main/NeutralFlip.toc) [![Release](https://img.shields.io/github/v/release/masterred92/NeutralFlip?label=release)](https://github.com/masterred92/NeutralFlip/releases) [![License: MIT](https://img.shields.io/github/license/masterred92/NeutralFlip)](https://github.com/masterred92/NeutralFlip/blob/main/LICENSE) [![CurseForge](https://img.shields.io/badge/CurseForge-NeutralFlip-f16436)](https://www.curseforge.com/wow/addons/neutralflip) [![Wago](https://img.shields.io/badge/Wago-NeutralFlip-c1272d)](https://addons.wago.io/addons/neutralflip)
 
@@ -27,6 +27,8 @@ NeutralFlip keeps **separate prices for your faction AH and the neutral AH**. It
 **New in 0.2.0**
 - **TomTom arrow:** `/nflip way` points a TomTom arrow at the nearest neutral AH (Gadgetzan on Kalimdor, Booty Bay in the Eastern Kingdoms), or `/nflip way everlook`. Only if TomTom is installed. It sets a waypoint; you do the walking.
 - **LDB display:** with Titan Panel, ChocolateBar, Bazooka or another LibDataBroker display, NeutralFlip shows the number of flips, the top five in its tooltip, opens the list on left-click and sets the TomTom arrow on right-click.
+
+**Works with:** PriceLog (uses its saved prices; one scan feeds both), MatTooltip (one tooltip block, no repeated AH price), GoldPerSpot (shows the flip value of farmed items). Works fully on its own.
 
 ## Download
 - **CurseForge:** https://www.curseforge.com/wow/addons/neutralflip (first release coming at launch, Nov 4). Author: [MasterRed92](https://www.curseforge.com/members/masterred92/projects).

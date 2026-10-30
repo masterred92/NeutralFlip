@@ -21,6 +21,10 @@ HOST = {
     "TomTom": "TomTom global (TomTom.lua); TomTom:AddWaypoint(mapID, x, y, opts)",
     "Bagnon": "Bagnon global (Bagnon addon); Bagnon.Item.Update",
     "BagBrother": "BagBrother global (BagBrother addon, Bagnon's item data)",
+    "KennyDwarfExplorersBible": "our own Dwarf Explorer's Bible addon (github.com/masterred92/DwarfExplorersBible)",
+    "Auctionator": "Auctionator global; Auctionator.API.v1.GetAuctionPriceByItemID(callerID, itemID) in Source/API/v1/GetAuctionPrice.lua (Forever build 341)",
+    "TSM_API": "TradeSkillMaster global; TSM_API.GetCustomPriceValue(customPriceStr, itemString) in Core/API.lua (no Forever build yet)",
+    "AucAdvanced": "Auctioneer global; AucAdvanced.API.GetMarketValue(itemLink, serverKey) in Auc-Advanced/CoreAPI.lua (Auctioneer (Forever) 4.0.0)",
 }
 HOST_METHODS = {
     "RegisterCallback": "DBM:RegisterCallback(event, func) DBM-Core.lua",

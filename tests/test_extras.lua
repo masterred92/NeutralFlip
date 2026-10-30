@@ -13,7 +13,7 @@ function tt:AddLine(s) self.lines[#self.lines + 1] = tostring(s) end
 function tt:AddDoubleLine(a, b) self.lines[#self.lines + 1] = tostring(a) .. ": " .. tostring(b) end
 local function ttText(o) tt.lines = {}; o.OnTooltipShow(tt); return table.concat(tt.lines, " | ") end
 W.loadAddon(".", "NeutralFlip")
-W.fire("PLAYER_LOGIN")
+W.fire("PLAYER_LOGIN"); W.runTimers()
 local NF = KennyNeutralFlip
 local o = ldbObjs.NeutralFlip
 check(o and o.type == "data source" and o.text == "no flips", "LDB object registered at login")

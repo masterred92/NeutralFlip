@@ -1,4 +1,4 @@
--- LibDataBroker launcher for Titan Panel, ChocolateBar, Bazooka and other LDB displays (only if one is installed).
+-- LibDataBroker launcher (shared with our other addons) for Titan Panel, ChocolateBar, Bazooka and other LDB displays (only if one is installed).
 local _, ns = ...
 local NF = KennyNeutralFlip
 local C = ns.Compat
@@ -25,9 +25,9 @@ end
 
 function NF.InstallBroker()
   if obj then return obj end
-  local ldb = type(LibStub) == "table" and LibStub("LibDataBroker-1.1", true)
-  if not ldb then return nil end
-  obj = ldb:NewDataObject("NeutralFlip", {
+  -- One shared "Kenny's addons" entry with a menu when several of our addons are installed; our own entry when alone.
+  obj = ns.Hub.Launcher("NeutralFlip", {
+    leftHint = "Flip list", rightHint = "TomTom arrow to a neutral AH",
     type = "data source", text = "NeutralFlip", label = "NeutralFlip",
     icon = "Interface\\AddOns\\NeutralFlip\\media\\icon",
     OnClick = function(_, button)
