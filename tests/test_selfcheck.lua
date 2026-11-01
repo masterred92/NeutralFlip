@@ -11,7 +11,7 @@ W.prints = {}
 W.fire("PLAYER_LOGIN")
 local all = table.concat(W.prints, "\n")
 local hasFirstRun = Core.spec.firstRun and Core.spec.db and Core.spec.db()
-if hasFirstRun then check(#W.prints >= 2, "first-run message printed") end
+if hasFirstRun then check(#W.prints >= 1, "first-run message printed") end
 check(not all:find("WARNING", 1, true), "no warning when every API exists: " .. all)
 W.prints = {}
 Core.Startup()

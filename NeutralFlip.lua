@@ -290,14 +290,20 @@ f:RegisterEvent("REPLICATE_ITEM_LIST_UPDATE")
 f:RegisterEvent("AUCTION_HOUSE_BROWSE_RESULTS_UPDATED")
 f:RegisterEvent("COMMODITY_SEARCH_RESULTS_UPDATED")
 
+local announced = {}
 function NF.OnAHShow()
   ahOpen = true
   local kind, why = NF.DetectKind()
   currentKind = kind
   house = houseData(kind)
+  -- One line per auction house per session (not on every visit), unless there are flips to report.
   local _, n = NF.ListText()
-  Core.Print(("this is the %s auction house (%s). %s"):format(NF.KindLabel(kind), why,
-    n > 0 and (n .. " flips found: /nflip") or "Search or /nflip scan to record prices."))
+  local key = NF.LocationKey()
+  if n > 0 or not announced[key] then
+    announced[key] = true
+    Core.Print(("this is the %s auction house (%s). %s"):format(NF.KindLabel(kind), why,
+      n > 0 and (n .. " flips found: /nflip") or "Search or /nflip scan to record prices."))
+  end
   C_Timer.After(1, function()
     if not ahOpen then return end
     Core.SafeCall("deposit", function()
@@ -358,10 +364,7 @@ NF.REQUIRED_APIS = { "C_AuctionHouse.ReplicateItems", "C_AuctionHouse.GetNumRepl
   "C_AuctionHouse.IsThrottledMessageSystemReady", "C_Container.GetContainerItemInfo", "TooltipDataProcessor.AddTooltipPostCall" }
 Core.Setup({ cmd = "/nflip", required = NF.REQUIRED_APIS, optional = { "C_Map.GetBestMapForUnit", "TomTom", "LibStub", "KennyPriceLog" },
   db = function() return db end,
-  firstRun = { L["Welcome! NeutralFlip compares your faction AH with the neutral AH. Three steps:"],
-    L["1. At your faction AH: search your items, or /nflip scan (one full scan per 15 min)."],
-    L["2. At a neutral AH (Booty Bay, Gadgetzan, Everlook; /nflip way for a TomTom arrow): do the same."],
-    L["3. /nflip lists what to carry where. Prices older than 24h are ignored. /nflip debug checks your setup."] },
+  firstRun = { L["Welcome! Search or /nflip scan at your faction AH and at a neutral AH, then /nflip lists what to carry where."] }, -- one line on first install only
   debugLines = function()
     local out = { L["location"] .. ": " .. NF.LocationKey() .. " -> " .. NF.KindLabel((NF.DetectKind())) }
     for key, h in pairs(db.houses) do

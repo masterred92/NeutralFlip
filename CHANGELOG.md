@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.3.2
+- Quieter: the first-login welcome is one line instead of four.
+- Quieter: the 'this is the ... auction house' line shows once per auction house per session (or when there are flips), not on every visit.
+
 ## 0.3.1
 - `/nflip wipe` at an open auction house no longer stops later searches there from being recorded.
 - Cut percentages show exactly (7.5% instead of 7%).

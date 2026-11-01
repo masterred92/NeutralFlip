@@ -3,15 +3,12 @@
 -- the file to the TOC. Any string without a translation falls back to the English text.
 local _, ns = ...
 ns.Core.AddLocale("enUS", {
-  ["1. At your faction AH: search your items, or /nflip scan (one full scan per 15 min)."] = true,
-  ["2. At a neutral AH (Booty Bay, Gadgetzan, Everlook; /nflip way for a TomTom arrow): do the same."] = true,
-  ["3. /nflip lists what to carry where. Prices older than 24h are ignored. /nflip debug checks your setup."] = true,
   ["Its results are recorded here too."] = true,
   ["Last full scan"] = true,
   ["Nothing worth carrying yet. Search or /nflip scan at BOTH your faction AH and a neutral AH (Booty Bay, Gadgetzan, Everlook), then check again."] = true,
   ["Some features are switched off. Type"] = true,
   ["WARNING: this client is missing APIs this addon needs:"] = true,
-  ["Welcome! NeutralFlip compares your faction AH with the neutral AH. Three steps:"] = true,
+  ["Welcome! Search or /nflip scan at your faction AH and at a neutral AH, then /nflip lists what to carry where."] = true,
   ["a full scan was already started by"] = true,
   ["client"] = true,
   ["last full scan"] = true,
