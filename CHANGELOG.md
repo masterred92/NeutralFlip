@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.3.1
+- `/nflip wipe` at an open auction house no longer stops later searches there from being recorded.
+- Cut percentages show exactly (7.5% instead of 7%).
+- `/nflip status` says so when no prices are recorded yet.
+
 ## 0.3.0
 - One scan feeds every addon: when PriceLog, MatTooltip or GoldPerSpot is installed, an AH scan is shared, never repeated within 15 minutes.
 - Each side's price now shows its own age, and an empty list says when you last scanned.

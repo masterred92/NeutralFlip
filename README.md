@@ -1,6 +1,6 @@
 <p align="center"><img src="media/logo.png" alt="NeutralFlip logo" width="200"></p>
 
-# NeutralFlip (WoW: Forever) v0.3.0
+# NeutralFlip (WoW: Forever) v0.3.1
 
 [![Tests](https://github.com/masterred92/NeutralFlip/actions/workflows/tests.yml/badge.svg)](https://github.com/masterred92/NeutralFlip/actions/workflows/tests.yml) [![WoW: Forever](https://img.shields.io/badge/WoW%3A%20Forever-Interface%2016001-c8a165)](https://github.com/masterred92/NeutralFlip/blob/main/NeutralFlip.toc) [![Release](https://img.shields.io/github/v/release/masterred92/NeutralFlip?label=release)](https://github.com/masterred92/NeutralFlip/releases) [![License: MIT](https://img.shields.io/github/license/masterred92/NeutralFlip)](https://github.com/masterred92/NeutralFlip/blob/main/LICENSE) [![CurseForge](https://img.shields.io/badge/CurseForge-NeutralFlip-f16436)](https://www.curseforge.com/wow/addons/neutralflip) [![Wago](https://img.shields.io/badge/Wago-NeutralFlip-c1272d)](https://addons.wago.io/addons/neutralflip)
 

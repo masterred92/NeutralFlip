@@ -246,7 +246,7 @@ function NF.ListText(now)
   local list = NF.Opportunities(now)
   local lines = {}
   local fac = playerFaction()
-  lines[1] = ("%s: %s AH vs neutral AH. Cuts %d%% / %d%%. Prices older than %dh ignored.")
+  lines[1] = ("%s: %s AH vs neutral AH. Cuts %g%% / %g%%. Prices older than %gh ignored.")
     :format(realmName(), fac, settings.cutFaction * 100, settings.cutNeutral * 100, settings.maxAgeHours)
   if #list == 0 then
     lines[2] = L["Nothing worth carrying yet. Search or /nflip scan at BOTH your faction AH and a neutral AH (Booty Bay, Gadgetzan, Everlook), then check again."]
@@ -418,6 +418,7 @@ SlashCmdList.KENNYNEUTRALFLIP = function(msg)
     settings.tooltip = not settings.tooltip
     Core.Print("tooltip lines " .. (settings.tooltip and "on." or "off."))
   elseif cmd == "status" then
+    if next(db.houses) == nil then Core.Print("no prices recorded yet. Search or /nflip scan at an auction house.") end
     for key, h in pairs(db.houses) do
       local n = 0
       for _ in pairs(h.items) do n = n + 1 end
@@ -438,6 +439,7 @@ SlashCmdList.KENNYNEUTRALFLIP = function(msg)
     NF.Waypoint(rest)
   elseif cmd == "wipe" then
     db.houses = {}
+    if ahOpen and currentKind then house = houseData(currentKind) end -- keep recording at the open AH
     Core.Print("all recorded prices wiped.")
   else
     Core.Print(HELP)

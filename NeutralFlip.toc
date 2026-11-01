@@ -2,7 +2,7 @@
 ## Title: NeutralFlip
 ## Notes: Compares your faction AH with the neutral (Booty Bay / Gadgetzan / Everlook) AH and lists buys worth carrying across, after the 5%/15% cuts. You press every button.
 ## Author: Kenny
-## Version: 0.3.0
+## Version: 0.3.1
 ## SavedVariables: KennyNeutralFlipDB
 ## OptionalDeps: PriceLog, MatTooltip, LibDataBroker-1.1, TomTom
 ## X-License: MIT
