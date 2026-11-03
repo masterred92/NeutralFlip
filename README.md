@@ -24,17 +24,17 @@ NeutralFlip keeps **separate prices for your faction AH and the neutral AH**. It
 
 **Good to know:** the 5% faction / 15% neutral cuts come from [AHledger](https://ahledger.com/wow-forever/auction-house), and you can change them with `/nflip cut`. If a spot is detected as the wrong auction house, `/nflip here neutral` or `/nflip here faction` fixes it for that spot.
 
-**New in 0.2.0**
+**Extras**
 - **TomTom arrow:** `/nflip way` points a TomTom arrow at the nearest neutral AH (Gadgetzan on Kalimdor, Booty Bay in the Eastern Kingdoms), or `/nflip way everlook`. Only if TomTom is installed. It sets a waypoint; you do the walking.
 - **LDB display:** with Titan Panel, ChocolateBar, Bazooka or another LibDataBroker display, NeutralFlip shows the number of flips, the top five in its tooltip, opens the list on left-click and sets the TomTom arrow on right-click.
 
 **Works with:** PriceLog (uses its saved prices; one scan feeds both), MatTooltip (one tooltip block, no repeated AH price), GoldPerSpot (shows the flip value of farmed items). Works fully on its own.
 
 ## Download
-- **CurseForge:** https://www.curseforge.com/wow/addons/neutralflip (first release coming at launch, Nov 4). Author: [MasterRed92](https://www.curseforge.com/members/masterred92/projects).
-- **Wago Addons:** https://addons.wago.io/addons/neutralflip (first release coming at launch, Nov 4).
-- **GitHub:** [Releases](https://github.com/masterred92/NeutralFlip/releases) (coming with the first tagged release) · [Issues](https://github.com/masterred92/NeutralFlip/issues)
-- **Companion addons** (optional, they share AH scans): [PriceLog](https://github.com/masterred92/PriceLog) · [MatTooltip](https://github.com/masterred92/MatTooltip) · [GoldPerSpot](https://github.com/masterred92/GoldPerSpot)
+- **CurseForge:** https://www.curseforge.com/wow/addons/neutralflip. Author: [MasterRed92](https://www.curseforge.com/members/masterred92/projects).
+- **Wago Addons:** https://addons.wago.io/addons/neutralflip.
+- **GitHub:** [Releases](https://github.com/masterred92/NeutralFlip/releases) · [Issues](https://github.com/masterred92/NeutralFlip/issues)
+- **Companion addons** (optional, they share AH scans): [PriceLog](https://github.com/masterred92/PriceLog) · [MatTooltip](https://github.com/masterred92/MatTooltip) · [GoldPerSpot](https://github.com/masterred92/GoldPerSpot) · [Dwarf Explorer's Bible](https://www.curseforge.com/wow/addons/dwarf-explorers-bible)
 
 ## Commands
 `/nflip` lists flips (copyable) · `scan` (at an open AH, out of combat, about every 15 min) · `here neutral|faction|auto` · `status` · `cut faction 0.05` · `cut neutral 0.15` · `age 24` · `margin 0.2` · `tooltip` · `report` · `wipe`
