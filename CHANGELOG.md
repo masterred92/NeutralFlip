@@ -1,7 +1,8 @@
 # Changelog
 
-## Unreleased
-- Fixed: the deposit-rate check could measure the minimum deposit or copper rounding instead of the auction house's rate when the item it tried was cheap (the minimum deposit is 1 copper since the November 10 hotfix, and deposits are whole copper). It now tries your highest vendor-price items first and only trusts a deposit above 20 copper; with only cheap items in your bags it skips the check instead of storing a wrong rate.
+## 0.3.3
+- Fixed: the deposit-rate check could measure the minimum deposit or copper rounding instead of the auction house's rate when the item it tried was cheap (the minimum deposit is 1 copper since the November 17 maintenance, 1 silver before, and deposits are whole copper). It now tries your highest vendor-price items first and only keeps a deposit above 20 copper that also doubles when the stack doubles, so no minimum deposit is mistaken for the rate; with only cheap items in your bags it skips the check instead of storing a wrong rate.
+- Deposit rates saved by earlier versions are cleared once (they may be the old 1 silver minimum); your next auction house visit learns them again. Prices and /nflip here settings are kept.
 
 ## 0.3.2
 - Quieter: the first-login welcome is one line instead of four.
