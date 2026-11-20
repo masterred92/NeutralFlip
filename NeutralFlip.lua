@@ -86,7 +86,7 @@ end
 -- Deposit rate check ----------------------------------------------------------------------
 -- Forever has no API that says "this is the neutral AH". The deposit is a multiple of vendor price
 -- and differs between houses, so we learn deposit/vendor here and use it to double-check the zone.
--- Returns deposit/vendor for a 12h listing, measured on an item in your bags (stored by the caller).
+-- Returns deposit/vendor for the shortest (2 hour) listing, measured on an item in your bags (stored by the caller).
 -- WoW: Forever's minimum deposit per auction was 1 silver at launch; the November 10 hotfix notes set it to
 -- 1 copper, and it went live with the November 17 maintenance. Deposits are whole copper. So a cheap item's
 -- deposit is the floor or mostly rounding, not the house's rate. The probe tries the items with the highest
