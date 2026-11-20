@@ -84,19 +84,28 @@ end
 -- Forever has no API that says "this is the neutral AH". The deposit is a multiple of vendor price
 -- and differs between houses, so we learn deposit/vendor here and use it to double-check the zone.
 -- Returns deposit/vendor for a 12h listing, measured on an item in your bags (stored by the caller).
+-- Since the November 10 hotfix the minimum deposit per auction is 1 copper (was 1 silver) and deposits are whole
+-- copper, so a cheap item's deposit is the floor or mostly rounding, not the house's rate. The probe tries the
+-- items with the highest vendor price first and only trusts a deposit above PROBE_MIN_DEPOSIT (20c for the
+-- 20-unit probe: past both a 1c-per-auction and a 1c-per-unit floor, and rounding stays under 2.5%).
+-- No such item = no reading (nil), never a skewed one.
+NF.PROBE_QTY = 20
+NF.PROBE_MIN_DEPOSIT = 20
+NF.PROBE_MAX_TRIES = 20
 function NF.ProbeDepositRate()
   if not (C_AuctionHouse and C_AuctionHouse.CalculateCommodityDeposit) then return nil end
-  local tried = 0
+  local items = {}
   for itemID in pairs(C.GetBagCounts()) do
     local info = C.GetItemInfo(itemID)
-    if info and info.sellPrice and info.sellPrice > 0 then
-      tried = tried + 1
-      local ok, dep = pcall(C_AuctionHouse.CalculateCommodityDeposit, itemID, 1, 20)
-      dep = ok and C.SafeNumber(dep) or nil
-      if dep and dep > 0 then
-        return dep / (info.sellPrice * 20)
-      end
-      if tried >= 10 then break end
+    if info and info.sellPrice and info.sellPrice > 0 then items[#items + 1] = { id = itemID, sell = info.sellPrice } end
+  end
+  table.sort(items, function(a, b) if a.sell ~= b.sell then return a.sell > b.sell end return a.id < b.id end)
+  for i = 1, math.min(#items, NF.PROBE_MAX_TRIES) do
+    local it = items[i]
+    local ok, dep = pcall(C_AuctionHouse.CalculateCommodityDeposit, it.id, 1, NF.PROBE_QTY)
+    dep = ok and C.SafeNumber(dep) or nil
+    if dep and dep > NF.PROBE_MIN_DEPOSIT then
+      return dep / (it.sell * NF.PROBE_QTY)
     end
   end
   return nil
