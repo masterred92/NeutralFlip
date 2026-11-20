@@ -8,7 +8,7 @@ local L = Core.L
 local NF = {}
 KennyNeutralFlip = NF
 
-local SCHEMA = 1
+local SCHEMA = 2
 local SCAN_COOLDOWN = 15 * 60
 local NEUTRAL = "Neutral"
 local DEFAULTS = {
@@ -35,6 +35,9 @@ local ahOpen, house, scanToken, processing = false, nil, 0, false
 
 local migrations = {
   [1] = function(old) return { houses = {}, overrides = {}, rates = {}, settings = old.settings or {} } end,
+  -- 0.3.3: deposit rates learned by 0.3.2 and earlier may be the 1s minimum deposit, not the house's rate.
+  -- Forget them; the next auction house visit learns them again.
+  [2] = function(old) old.rates = {}; return old end,
 }
 
 -- Location / house ------------------------------------------------------------------------
@@ -83,20 +86,40 @@ end
 -- Deposit rate check ----------------------------------------------------------------------
 -- Forever has no API that says "this is the neutral AH". The deposit is a multiple of vendor price
 -- and differs between houses, so we learn deposit/vendor here and use it to double-check the zone.
--- Returns deposit/vendor for a 12h listing, measured on an item in your bags (stored by the caller).
+-- Returns deposit/vendor for the shortest (2 hour) listing, measured on an item in your bags (stored by the caller).
+-- WoW: Forever's minimum deposit per auction was 1 silver at launch; the November 10 hotfix notes set it to
+-- 1 copper, and it went live with the November 17 maintenance. Deposits are whole copper. So a cheap item's
+-- deposit is the floor or mostly rounding, not the house's rate. The probe tries the items with the highest
+-- vendor price first and keeps a reading only when:
+--  * the 20-unit deposit is above PROBE_MIN_DEPOSIT (20c: past a 1c-per-auction and a 1c-per-unit floor), and
+--  * the 40-unit deposit is twice the 20-unit one, give or take 1c of rounding. A per-auction minimum of any
+--    size (1c, 1s, or a future change) does not double, so a clamped deposit is never taken as the rate.
+-- The rate is read from the 40-unit deposit (above 40c, so rounding is under 2.5%).
+-- No such item = no reading (nil), never a skewed one.
+NF.PROBE_QTY = 20
+NF.PROBE_MIN_DEPOSIT = 20
+NF.PROBE_MAX_TRIES = 20
+local function deposit(itemID, qty)
+  local ok, dep = pcall(C_AuctionHouse.CalculateCommodityDeposit, itemID, 1, qty)
+  return ok and C.SafeNumber(dep) or nil
+end
 function NF.ProbeDepositRate()
   if not (C_AuctionHouse and C_AuctionHouse.CalculateCommodityDeposit) then return nil end
-  local tried = 0
+  local items = {}
   for itemID in pairs(C.GetBagCounts()) do
     local info = C.GetItemInfo(itemID)
-    if info and info.sellPrice and info.sellPrice > 0 then
-      tried = tried + 1
-      local ok, dep = pcall(C_AuctionHouse.CalculateCommodityDeposit, itemID, 1, 20)
-      dep = ok and C.SafeNumber(dep) or nil
-      if dep and dep > 0 then
-        return dep / (info.sellPrice * 20)
+    if info and info.sellPrice and info.sellPrice > 0 then items[#items + 1] = { id = itemID, sell = info.sellPrice } end
+  end
+  table.sort(items, function(a, b) if a.sell ~= b.sell then return a.sell > b.sell end return a.id < b.id end)
+  local q = NF.PROBE_QTY
+  for i = 1, math.min(#items, NF.PROBE_MAX_TRIES) do
+    local it = items[i]
+    local dep = deposit(it.id, q)
+    if dep and dep > NF.PROBE_MIN_DEPOSIT then
+      local dep2 = deposit(it.id, 2 * q)
+      if dep2 and math.abs(dep2 - 2 * dep) <= 1 then
+        return dep2 / (it.sell * 2 * q)
       end
-      if tried >= 10 then break end
     end
   end
   return nil
