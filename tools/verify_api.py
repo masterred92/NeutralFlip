@@ -10,7 +10,7 @@ Checks, against the given checkout (we use the `forever` branch, 1.60.1 build 70
   * widget methods called with ':' (must be documented or used by Blizzard's own code)
 Exit code 1 if anything is missing.
 """
-import re, sys, subprocess, pathlib, shutil
+import re, sys, os, subprocess, pathlib, shutil
 
 # Globals and methods that come from the host addons (DBM, BigWigs, Details, Questie, LibStub...) or from the
 # client but not from Blizzard's UI source. Each one was checked by hand in the host's own source; see host_api.py.
@@ -49,7 +49,9 @@ tostring type unpack xpcall math string table coroutine os _G""".split())
 WOW_LUA_EXTRAS = {"date": "WoW keeps Lua's date()", "time": "WoW keeps Lua's time()"}
 
 def luacheck_globals(path):
-    lc = shutil.which("luacheck") or "/workspace/lua51/bin/luacheck"
+    lc = shutil.which("luacheck") or os.environ.get("LUACHECK")
+    if not lc:
+        sys.exit("luacheck not found on PATH; set LUACHECK to its executable")
     out = subprocess.run([lc, "--no-config", "--std", "lua51", "--formatter", "plain", "--codes", str(path)],
                          capture_output=True, text=True, timeout=120).stdout
     read = set(re.findall(r"\(W113\) accessing undefined variable '(\w+)'", out))

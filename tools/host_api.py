@@ -1,6 +1,6 @@
 """Host-addon and client names that are not in Blizzard's UI source, each checked by hand in the host's source.
 
-Host checkouts used (cloned under /workspace/wow-hosts on 2026-10-26):
+Host checkouts used (checked on 2026-10-26):
   DeadlyBossMods d31d9d4 (ReleaseRevision 20261026000000), BigWigs b26c019 (r427, 2026-10-23),
   Details-Damage-Meter d1e8ad7 (realversion 172, Details_Camelot.toc = 16001), Questie 12.3.1 (Questie_Camelot.toc),
   LibDataBroker-1.1, TomTom 4.3.13, Bagnon 12.1.7.

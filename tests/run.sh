@@ -5,7 +5,8 @@
 # Host addons a plugin uses are listed in its TOC as ## X-Hosts: BigWigs, DeadlyBossMods (see tools/verify_hosts.py).
 set -e
 cd "$(dirname "$0")/.."
-[ -d /workspace/lua51/bin ] && PATH=/workspace/lua51/bin:$PATH
+# Optional Lua 5.1 bindir: export LUA51_BIN=<path to lua 5.1 bindir>. Otherwise lua and luacheck must already be on PATH.
+[ -n "${LUA51_BIN:-}" ] && [ -d "$LUA51_BIN" ] && PATH="$LUA51_BIN:$PATH"
 ADDON=$(ls *.toc | head -1 | sed 's/\.toc$//')
 FILES=$(grep -E '\.lua$' "$ADDON.toc" | grep -v '^#' | tr -d '\r' | tr '\\' '/')
 for f in $FILES; do luac -p "$f"; done
