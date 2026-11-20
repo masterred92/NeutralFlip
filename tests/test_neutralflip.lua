@@ -12,7 +12,7 @@ W.items[785] = { "Mageroyal", 7, 9, 5 }
 W.loadAddon(".", "NeutralFlip")
 W.fire("PLAYER_LOGIN"); W.runTimers()
 local NF, db = KennyNeutralFlip, KennyNeutralFlipDB
-check(db.schema == 1 and db.houses and db.overrides and db.rates, "schema 1 tables")
+check(db.schema == 2 and db.houses and db.overrides and db.rates, "schema 2 tables")
 
 -- Faction AH in Stormwind
 W.zone, W.subzone = "Stormwind City", "Trade District"
